@@ -1,0 +1,25 @@
+{
+  "project": { "name": "ten-du-an", "chatLanguage": "vi" },
+  "apps": [
+    { "id": "backend", "path": "backend", "srcPath": "backend/app", "verify": "python -m pytest tests/ -q", "expectedTests": null },
+    { "id": "frontend", "path": "frontend", "srcPath": "frontend/src", "verify": "npm test", "expectedTests": null },
+    { "id": "mobile", "path": "mobile", "srcPath": "mobile/src", "verify": "npm test", "expectedTests": null }
+  ],
+  "docPaths": {
+    "aiContext": "docs/ai-context",
+    "agents": "AGENTS.md",
+    "agentsConfig": "docs/agents"
+  },
+  "skillPaths": [".claude/skills"],
+  "claims": [
+    { "doc": "docs/ai-context/MODULE_MAP.md", "re": "^## backend — .* · ([\\d.]+) lines", "kind": "lines:backend" },
+    { "doc": "docs/ai-context/MODULE_MAP.md", "re": "^## frontend — .* · ([\\d.]+) lines", "kind": "lines:frontend/src" },
+    { "doc": "docs/ai-context/MODULE_MAP.md", "re": "^\\| \\`favicon\\.ico\\` \\|", "kind": "exists:frontend/public/favicon.ico" }
+  ],
+  "gates": [
+    { "id": "doc-truth", "cmd": "node", "args": ["scripts/doc-truth.mjs"], "cwd": ".", "tags": [], "requires": [], "env": {}, "optional": false },
+    { "id": "frontend-tests", "cmd": "npm", "args": ["test"], "cwd": "frontend", "tags": [], "requires": ["frontend/node_modules"], "env": {}, "optional": false },
+    { "id": "mobile-typecheck", "cmd": "npx", "args": ["tsc", "--noEmit"], "cwd": "mobile", "tags": [], "requires": ["mobile/node_modules"], "env": {}, "optional": true },
+    { "id": "backend-tests", "cmd": "python", "args": ["-m", "pytest", "tests/", "-q"], "cwd": "backend", "tags": ["slow"], "requires": ["backend/.venv"], "env": { "PYTHONUTF8": "1" }, "optional": false }
+  ]
+}

@@ -1,0 +1,20 @@
+# Agent working memory — plans/notes (never commit)
+# Convention: drafts/plans/<MMDDYY>_<n>_<status>/  — see template/AGENTS.md "Plan & Task Documents"
+drafts/
+
+# Node
+node_modules/
+npm-debug.log*
+*.log
+__pycache__/
+*.pyc
+
+# Env / secrets — NEVER commit (*.example files MUST be committed)
+.env
+.env.*
+!.env.example
+!*.example
+
+# OS
+.DS_Store
+Thumbs.db

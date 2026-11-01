@@ -1,0 +1,27 @@
+# Agent working memory — plans/notes (never commit; see AGENTS.md "Plan & Task Documents")
+drafts/
+
+# Secrets — NEVER commit (*.example files MUST be committed)
+.env
+.env.*
+!.env.example
+!*.example
+
+# Dependencies & build output
+node_modules/
+dist/
+build/
+.next/
+out/
+coverage/
+*.log
+__pycache__/
+*.pyc
+
+# Runtime data
+storage/
+*.sqlite3
+
+# OS
+.DS_Store
+Thumbs.db

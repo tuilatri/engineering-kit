@@ -1,0 +1,154 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/tuilatri/engineering-kit/kit.config.schema.json",
+  "title": "kit.config.json",
+  "description": "Configuration for the engineering-kit harness. scripts/verify.mjs runs gates[], scripts/doc-truth.mjs checks claims[]. Every relative path (apps[].path, gates[].cwd, gates[].requires, claims[].doc and the paths inside claims[].kind) is resolved against the directory that CONTAINS kit.config.json (the config root), so both scripts work from any subdirectory. A fresh config with empty apps/claims/gates arrays is valid: the scripts exit 0 with a visible warning instead of failing.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["project"],
+  "properties": {
+    "project": {
+      "type": "object",
+      "description": "Project identity, filled in by `npx engineering-kit init`.",
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Human-readable project name (e.g. \"ten-du-an\"). Shown in the verify.mjs banner."
+        },
+        "chatLanguage": {
+          "type": "string",
+          "enum": ["vi", "en"],
+          "description": "Language AI agents chat with the user in (mirrors AGENTS.md)."
+        }
+      }
+    },
+    "apps": {
+      "type": "array",
+      "description": "One entry per application in the repo. Informational for the harness scripts (gates[] is what actually runs); keeps a machine-readable map of the repo.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "path"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Short app id, e.g. \"backend\", \"frontend\", \"mobile\"."
+          },
+          "path": {
+            "type": "string",
+            "description": "App root directory, relative to the config root."
+          },
+          "srcPath": {
+            "type": "string",
+            "description": "Primary source directory of the app, relative to the config root (a good target for lines:<path> claims)."
+          },
+          "verify": {
+            "type": "string",
+            "description": "The app's main verify command, as documentation only. The commands actually run by scripts/verify.mjs are defined in gates[]."
+          },
+          "expectedTests": {
+            "type": ["integer", "null"],
+            "description": "Expected number of tests, as documentation only; null = not measured. Numbers pinned against reality belong in claims[], which doc-truth.mjs enforces."
+          }
+        }
+      }
+    },
+    "docPaths": {
+      "type": "object",
+      "description": "Where the kit's process docs live, relative to the config root.",
+      "additionalProperties": false,
+      "properties": {
+        "aiContext": {
+          "type": "string",
+          "description": "Directory of AI-context docs (MODULE_MAP.md, TESTING_GUIDE.md, ...)."
+        },
+        "agents": {
+          "type": "string",
+          "description": "Path of the AGENTS.md file."
+        },
+        "agentsConfig": {
+          "type": "string",
+          "description": "Directory of agent process docs (issue tracker conventions, triage labels, ...)."
+        }
+      }
+    },
+    "skillPaths": {
+      "type": "array",
+      "description": "Declarative single source for where skills live — see SKILL-SOURCES.md. NOT consumed by verify.mjs/doc-truth.mjs: register these paths in your tools (Claude Code scans .claude/skills natively; OpenCode needs opencode.json skills.paths; ZCode discovers project scope; Antigravity scans the workspace). Default [\".claude/skills\"] (repo-local, versioned, reproducible). Append a global/home path only as a personal-convenience layer — fresh clones and CI will not see it, and repo docs must never depend on it. Keep skill names unique across layers (shadowing precedence differs per tool).",
+      "items": { "type": "string" }
+    },
+    "claims": {
+      "type": "array",
+      "description": "Docs-vs-truth checks for scripts/doc-truth.mjs. Each claim pins a number written in a doc to a measurable fact. Number convention: the DOT is the thousands separator, so \"5.670\" means 5670 (doc-truth strips dots before comparing). A claim whose regex no longer matches any line is a WARNING (claim drift), not a failure; a claim that matches but disagrees with reality is a FAIL (exit 1).",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["doc", "re", "kind"],
+        "properties": {
+          "doc": {
+            "type": "string",
+            "description": "Doc file to scan, relative to the config root."
+          },
+          "re": {
+            "type": "string",
+            "description": "Regex as a JSON string — escape backslashes (\"\\\\d\"). Compiled with the 'm' flag and tested line by line; the FIRST matching line wins and its capture group 1 is the docs number (for kind exists:<path> no capture group is needed). Anchor with ^...$ so edits elsewhere in the doc cannot hijack the match."
+          },
+          "kind": {
+            "type": "string",
+            "pattern": "^(lines|exists):.+",
+            "description": "What to measure. \"lines:<path>\": sum of NON-EMPTY lines of all files git lists under <path> (git ls-files --cached --others --exclude-standard = tracked + untracked-but-not-ignored, i.e. the files about to be committed); if <path> is a single file, its own count is used. Lines are split on /\\r?\\n/ (CRLF-safe) and a spaces-only line counts as NON-empty — never trim. \"exists:<path>\": the path must exist on disk."
+          }
+        }
+      }
+    },
+    "gates": {
+      "type": "array",
+      "description": "Verify gates run by scripts/verify.mjs: serial, fail-fast, in array order (put fast doc-truth gates first, slow tests last). An empty array is valid: verify exits 0 with a warning so a fresh install never fails.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "cmd"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Gate id, shown in --list and the PASS/FAIL lines; the target of --only/--skip."
+          },
+          "cmd": {
+            "type": "string",
+            "description": "Executable to spawn. On Windows, extension-less commands (npm, npx, python, node, git) and .cmd/.bat wrappers run through cmd.exe (it resolves PATHEXT); commands with a concrete extension (.exe, .py, ...) spawn directly so paths with spaces are never shell-mangled. Bare npm/npx therefore work cross-platform."
+          },
+          "args": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Arguments passed to cmd. Optional; defaults to []."
+          },
+          "cwd": {
+            "type": "string",
+            "description": "Working directory for the gate, relative to the config root. Optional; defaults to \".\"."
+          },
+          "tags": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Free-form labels. The tag \"slow\" marks gates that --fast skips (e.g. the long pytest suite)."
+          },
+          "requires": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Preflight paths (venv, node_modules, build artifacts) that must exist before any gate runs; resolved relative to the config root. If any is missing, verify lists them all and exits 1 WITHOUT running any gate."
+          },
+          "env": {
+            "type": "object",
+            "additionalProperties": { "type": "string" },
+            "description": "Extra environment variables merged into the child process env — on top of PYTHONIOENCODING=utf-8 and PYTHONUTF8=1, which verify always sets for every gate."
+          },
+          "optional": {
+            "type": "boolean",
+            "description": "true: a failure prints a WARN line and the run CONTINUES; an optional gate never changes the exit code. Default false (fail-fast)."
+          }
+        }
+      }
+    }
+  }
+}
