@@ -10,7 +10,7 @@
  *
  * Zero dependencies — Node >= 18 stdlib only. Windows-safe.
  */
-import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import readline from 'node:readline/promises';
@@ -107,6 +107,12 @@ cpSync(templateDir, target, { recursive: true });
 for (const f of ['kit.config.example.json', 'kit.config.schema.json']) {
   cpSync(join(packageRoot, f), join(target, f));
 }
+
+// ---------- npm-shipped gitignore ----------
+// npm strips files named ".gitignore" from packages, so the template carries it
+// as "gitignore" (no dot) and init renames it at the target.
+const plainGitignore = join(target, 'gitignore');
+if (existsSync(plainGitignore)) renameSync(plainGitignore, join(target, '.gitignore'));
 
 // ---------- optional skill layer ----------
 // Bundled by default ("foundation from the start"); --no-skills strips it.

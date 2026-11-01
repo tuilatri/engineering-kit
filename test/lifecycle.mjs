@@ -227,9 +227,13 @@ try {
   } catch { /* handled below */ }
   ok('tarball lists files', files.length > 0, `parsed ${files.length} files`);
   for (const f of ['package.json', 'src/init.mjs', 'template/AGENTS.md', 'template/scripts/verify.mjs',
-    'template/scripts/doc-truth.mjs', 'kit.config.example.json', 'kit.config.schema.json', 'README.md', 'SEED-NOTE.md']) {
+    'template/scripts/doc-truth.mjs', 'kit.config.example.json', 'kit.config.schema.json', 'README.md', 'SEED-NOTE.md',
+    'template/gitignore']) {
     ok(`tarball has ${f}`, files.includes(f));
   }
+  // npm strips ".gitignore" from packages — that is why the template ships "gitignore"
+  // and init renames it at the target (asserted in section 1).
+  ok('tarball excludes template/.gitignore (npm behavior)', !files.includes('template/.gitignore'));
   ok('tarball excludes example/', !files.some((f) => f.startsWith('example/')));
   ok('tarball excludes drafts/', !files.some((f) => f.startsWith('drafts/')));
   ok('tarball excludes docs/plans', !files.some((f) => f.startsWith('docs/plans')));

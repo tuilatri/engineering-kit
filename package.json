@@ -1,13 +1,26 @@
 {
   "name": "engineering-kit",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Engineering kit: prompt/context/loop/harness/agentic setup for AI-assisted projects. Run init, get AGENTS.md + docs/ai-context + agent roles + config-driven verify gates.",
   "type": "module",
-  "bin": { "engineering-kit": "./src/init.mjs" },
-  "files": [ "src", "template", "test", "kit.config.example.json", "kit.config.schema.json", "README.md", "SEED-NOTE.md", "SKILL-SOURCES.md" ],
+  "bin": {
+    "engineering-kit": "./src/init.mjs"
+  },
+  "files": [
+    "src",
+    "template",
+    "test",
+    "kit.config.example.json",
+    "kit.config.schema.json",
+    "README.md",
+    "SEED-NOTE.md",
+    "SKILL-SOURCES.md"
+  ],
   "scripts": {
     "test": "node test/lifecycle.mjs"
   },
-  "engines": { "node": ">=18" },
+  "engines": {
+    "node": ">=18"
+  },
   "license": "MIT"
 }
