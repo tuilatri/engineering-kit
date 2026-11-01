@@ -1,0 +1,19 @@
+engineering-kit scaffold marker
+===============================
+
+This project was scaffolded by engineering-kit v{{KIT_VERSION}}
+https://github.com/tuilatri/engineering-kit
+
+What was installed (the kit's working layers):
+- prompt contract .... AGENTS.md (constitution, Doc Trigger, Quick Facts)
+- context ............ docs/ai-context/ (source-of-truth docs, MEASURE-backed)
+- loop ............... scripts/verify.mjs + scripts/doc-truth.mjs (fail-fast
+                       gates, config-driven via kit.config.json)
+- agentic roles ...... .claude/agents/ (role cards with owned scope + DoD)
+- skills ............. .claude/skills/ (bundled corpus) + skills-disabled/
+                       (triage pool) — manifest: SKILL-SOURCES.md
+- workflow ........... docs/agents/ (local issue tracker + label vocabulary)
+
+Keep this file: it records which kit version generated the scaffold (useful
+when a future `update` command lands). Regenerate with:
+  npx github:tuilatri/engineering-kit init <dir> --yes

@@ -18,6 +18,7 @@ import readline from 'node:readline/promises';
 const here = dirname(fileURLToPath(import.meta.url));
 const packageRoot = resolve(here, '..');
 const templateDir = resolve(packageRoot, 'template');
+const kitVersion = JSON.parse(readFileSync(join(packageRoot, 'package.json'), 'utf8')).version;
 
 const USAGE = `
 engineering-kit init — scaffolds AI-agent conventions into a new project
@@ -142,7 +143,8 @@ const replaceInTree = (dir) => {
       const content = readFileSync(full, 'utf8');
       const replaced = content
         .split('{{PROJECT_NAME}}').join(projectName)
-        .split('{{CHAT_LANGUAGE}}').join(chatLanguageLabel);
+        .split('{{CHAT_LANGUAGE}}').join(chatLanguageLabel)
+        .split('{{KIT_VERSION}}').join(kitVersion);
       if (replaced !== content) writeFileSync(full, replaced);
     }
   }
@@ -158,7 +160,8 @@ const checkLeftover = (dir) => {
     if (f.isDirectory()) checkLeftover(full);
     else {
       const content = readFileSync(full, 'utf8');
-      if (content.includes('{{PROJECT_NAME}}') || content.includes('{{CHAT_LANGUAGE}}')) {
+      if (content.includes('{{PROJECT_NAME}}') || content.includes('{{CHAT_LANGUAGE}}')
+        || content.includes('{{KIT_VERSION}}')) {
         leftover.push(full);
       }
     }
@@ -173,6 +176,10 @@ if (leftover.length > 0) {
 console.log(`
 ✅ Engineering kit copied into: ${target}
    Project: ${projectName} · agent chat language: ${chatLanguageLabel}
+   Kit: v${kitVersion} · layers installed: prompt contract (AGENTS.md) ·
+   context docs (docs/ai-context) · loop (scripts/verify.mjs + doc-truth.mjs) ·
+   agentic roles (.claude/agents) · skills (.claude/skills + pool) ·
+   workflow (docs/agents) — see the hidden .engineering-kit marker for details.
 
 Next steps (required — see SEED-NOTE.md):
   1. Fill kit.config.json: apps + gates + claims (schema: kit.config.schema.json,

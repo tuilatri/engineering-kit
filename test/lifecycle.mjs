@@ -64,7 +64,7 @@ try {
   ok('init exits 0', r1.status === 0, `status=${r1.status}\n${r1.stderr}`);
   ok('init prints project name', r1.stdout.includes('demo'));
   const expected = [
-    'AGENTS.md', 'GLOSSARY.md', '.gitignore', 'SKILL-SOURCES.md', 'kit.config.json', 'kit.config.example.json', 'kit.config.schema.json',
+    'AGENTS.md', 'GLOSSARY.md', '.gitignore', '.engineering-kit', 'SKILL-SOURCES.md', 'kit.config.json', 'kit.config.example.json', 'kit.config.schema.json',
     '.claude/skills/README.md', '.claude/skills/clean-code/SKILL.md', '.claude/skills/pixijs/SKILL.md',
     '.claude/skills/impeccable/SKILL.md', '.claude/skills-disabled/README.md', '.claude/skills-disabled/triage/SKILL.md',
     'scripts/verify.mjs', 'scripts/doc-truth.mjs',
@@ -81,6 +81,9 @@ try {
   for (const f of expected) ok(`has ${f}`, tree.includes(f));
   ok('AGENTS.md has project name', readFileSync(join(targetA, 'AGENTS.md'), 'utf8').includes('# AGENTS.md — demo'));
   ok('AGENTS.md has chat language', readFileSync(join(targetA, 'AGENTS.md'), 'utf8').includes('Vietnamese'));
+  const marker = readFileSync(join(targetA, '.engineering-kit'), 'utf8');
+  const pkgVersion = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8')).version;
+  ok('.engineering-kit marker stamped with kit version', marker.includes(`v${pkgVersion}`));
 
   // init refuses to overwrite an existing project
   const r1b = node(INIT, [targetA, '--yes'], ROOT);

@@ -1,6 +1,6 @@
 {
   "name": "engineering-kit",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Engineering kit: prompt/context/loop/harness/agentic setup for AI-assisted projects. Run init, get AGENTS.md + docs/ai-context + agent roles + config-driven verify gates.",
   "type": "module",
   "bin": {
