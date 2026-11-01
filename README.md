@@ -4,7 +4,7 @@ Engineering kit for AI-assisted projects: **prompt / context / loop / harness / 
 One `init` command gives a new project the full battle-tested scaffolding.
 
 ```
-npx engineering-kit init my-new-project
+npx github:tuilatri/engineering-kit init my-new-project --yes
 ```
 
 ## What the kit provides (6 layers)
@@ -21,8 +21,14 @@ npx engineering-kit init my-new-project
 ## Quick start
 
 ```bash
-# After publish (or: node <repo>/src/init.mjs my-new-project for dev mode)
+# From GitHub — works today (public repo, no npm account needed). Pin a release with #v0.3.1:
+npx github:tuilatri/engineering-kit init my-new-project --yes
+
+# From the npm registry — only after the owner runs `npm publish --access public`:
 npx engineering-kit init my-new-project
+
+# Dev mode without any publishing:
+node <this-repo>/src/init.mjs my-new-project --yes
 
 cd my-new-project
 # 1. Fill kit.config.json: apps + gates + claims (see kit.config.schema.json)
