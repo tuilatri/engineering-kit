@@ -1,0 +1,6 @@
+#!/bin/sh
+# Install once per clone: git config core.hooksPath .githooks
+# Runs the fast gates (no gates configured yet → verify exits 0 with a warning).
+# Projects with gates: doc-truth, skill integrity, or any gate tagged "fast" run here.
+set -e
+exec node scripts/verify.mjs --fast

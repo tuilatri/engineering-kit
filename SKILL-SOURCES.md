@@ -52,6 +52,25 @@ When adding a skill from a new source: add a row here FIRST (source, license, la
 triage), then drop the folder into `.claude/skills/` (or `skills-disabled/`), then run
 the project's verify gate (skill-integrity checks count dirs against this manifest).
 
+## Triage per project (owner procedure)
+
+The bundled corpus is intentionally broad. **After init**, the adopting project should
+triage it, not load every skill:
+
+1. Keep skills that match the project's real stack and task types (process skills,
+   language/framework skills, design/testing skills actually used).
+2. Move clearly irrelevant groups (e.g. game/engine-specific SDKs on a web-only project)
+   from `.claude/skills/` to `.claude/skills-disabled/` with `Move-Item`/`mv` — **never
+   delete** upstream content; a future task may need it back.
+3. Update the project's own `SKILL-SOURCES.md` counts and group members to match the
+   new directory state, and record the triage date + reason.
+4. Write repo-local conventions as a dedicated skill in `.opencode/skills/`
+   (see that directory's README) and register the path in `opencode.json` and
+   `kit.config.json` → `skillPaths`.
+
+This kit's own counts (Active total / pool) describe the **bundled** corpus and must
+not be edited during per-project triage — the project's copy is a separate file.
+
 ## Register per tool (both layers: local + optional global)
 
 | Tool | Local (canonical) | Optional global layer |

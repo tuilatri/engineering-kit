@@ -1,0 +1,22 @@
+name: verify
+
+# Generic bootstrap for adopting projects: runs the shipped verify gates on
+# push/PR. With a fresh kit.config.json (0 gates) this exits 0 with a warning —
+# add project gates (tests, build, doc-truth, skill integrity) in kit.config.json
+# and install their dependencies before relying on this workflow.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run all verify gates
+        run: node scripts/verify.mjs

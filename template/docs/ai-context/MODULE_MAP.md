@@ -2,6 +2,8 @@
 
 > Source of truth for repo structure. Line counts = non-empty (TESTING_GUIDE §1 convention).
 > doc-truth.mjs parses the table below: `| \`path\` | number |` — keep the format when editing.
+>
+> **How to fill:** one `## <app> — <stack>` block per app with measured non-empty line counts (see TESTING_GUIDE §1). Never hand-write numbers — measure them; keep the row format intact so doc-truth can verify it.
 
 ## <app1> — <stack> · MEASURE lines · MEASURE files
 
