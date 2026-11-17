@@ -1,0 +1,5 @@
+#!/bin/sh
+# Rename to `pre-commit`, then: git config core.hooksPath .githooks
+# Runs the two fast gates (doc-truth + skill integrity) before each commit.
+set -e
+exec node scripts/verify.mjs --fast

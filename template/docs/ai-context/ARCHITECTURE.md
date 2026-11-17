@@ -1,6 +1,8 @@
 # ARCHITECTURE — {{PROJECT_NAME}}
 
 > Overall architecture. Fill in as the code takes shape — don't write it upfront.
+>
+> **What goes here:** apps/services, data layer, API surface, security model, integrations and known limits. **How to fill:** one short paragraph per numbered heading, derived from code that exists; leave a heading empty until the code exists rather than inventing a design.
 
 ## 1. Stack & Apps
 ## 2. Services & Modules

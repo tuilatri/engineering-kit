@@ -21,3 +21,17 @@ SOURCE OF TRUTH for one domain — docs contradict code ⇒ code is right, docs 
 | UI_UX_RULES.md | Component conventions |
 | BEHAVIORAL_GUIDELINES.md | Principles + skill/agent selection |
 | PROMPT_TEMPLATES.md | Reusable templates |
+
+## Starter / example files (rename and fill — they ship with placeholders on purpose)
+
+| File | What it is | When to use it |
+|---|---|---|
+| `../../PRODUCT.example.md` | Example product truth: apps, audience, jobs, constraints | Copy to `PRODUCT.md` once the product is clear; replace every `<...>` with real facts |
+| `../../DESIGN.example.md` | Example durable visual decisions: tokens, type, surfaces, motion | Copy to `DESIGN.md` when the UI world is chosen; use your own hex values |
+| `../../GLOSSARY.example.md` | Example ubiquitous-language table | Copy to `GLOSSARY.md` and add real domain terms (≤ 2 lines each) |
+| `../../.githooks/pre-commit.example` | Fast pre-commit gate (`verify.mjs --fast`) | Rename to `pre-commit`, then `git config core.hooksPath .githooks` |
+| `../../scripts/gate.example.mjs` | Cross-platform Node/Python gate dispatcher | Rename to `gate.mjs`, set your app path, pair with root npm scripts |
+
+These `.example` files deliberately contain no project facts — the kit's process is
+portable, the numbers and decisions belong to your project. `doc-truth.mjs` fails when
+documented numbers drift from reality, so measure before filling `MEASURE`.
