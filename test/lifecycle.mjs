@@ -295,6 +295,51 @@ try {
   const cfgD = JSON.parse(readFileSync(join(targetD, 'kit.config.json'), 'utf8'));
   ok('--no-skills: starter skillPaths = []', JSON.stringify(cfgD.skillPaths) === '[]');
 
+  // ── 10. --adopt into an existing project ──────────────────────────────
+  section(10, '--adopt: add missing, preserve project-owned files');
+  const targetE = join(work, 'existing');
+  mkdirSync(join(targetE, 'docs/ai-context'), { recursive: true });
+  mkdirSync(join(targetE, '.claude/skills/clean-code'), { recursive: true });
+  writeFileSync(join(targetE, 'AGENTS.md'), '# My own rules\nNever overwrite this line.\n');
+  writeFileSync(join(targetE, 'docs/ai-context/TESTING_GUIDE.md'), '## 1. Counts\n**42** collected pytest items\n');
+  writeFileSync(join(targetE, '.env'), 'LOCAL_SECRET_DO_NOT_COMMIT=1\n');
+  writeFileSync(join(targetE, '.gitignore'), 'my-custom-ignore\n');
+  writeFileSync(join(targetE, '.engineering-kit'), 'scaffolded by kit v0.0.1\n');
+  writeFileSync(join(targetE, '.claude/skills/clean-code/SKILL.md'), 'MY CUSTOM SKILL\n');
+
+  const adoptArgs = [INIT, [targetE, '--adopt', '--yes', '--name', 'demo'], ROOT];
+  const r10 = node(...adoptArgs);
+  ok('adopt exits 0', r10.status === 0, `status=${r10.status}\n${r10.stderr}`);
+  const agents10 = readFileSync(join(targetE, 'AGENTS.md'), 'utf8');
+  ok('case 1: existing AGENTS.md kept + adopt block added',
+    agents10.includes('Never overwrite this line.') && agents10.includes('engineering-kit adopt:v'));
+  ok('missing files added', existsSync(join(targetE, 'scripts/verify.mjs'))
+    && existsSync(join(targetE, 'docs/agents/issue-tracker-local.md')));
+  ok('case 8: filled ai-context doc NOT replaced by MEASURE',
+    readFileSync(join(targetE, 'docs/ai-context/TESTING_GUIDE.md'), 'utf8').includes('**42**'));
+  ok('case 9: .env untouched',
+    readFileSync(join(targetE, '.env'), 'utf8').includes('LOCAL_SECRET_DO_NOT_COMMIT'));
+  ok('case 4: .gitignore untouched',
+    readFileSync(join(targetE, '.gitignore'), 'utf8').includes('my-custom-ignore'));
+  ok('case 5: marker version untouched',
+    readFileSync(join(targetE, '.engineering-kit'), 'utf8').includes('v0.0.1'));
+  ok('case 3: colliding skill kept',
+    readFileSync(join(targetE, '.claude/skills/clean-code/SKILL.md'), 'utf8').includes('MY CUSTOM SKILL'));
+  ok('summary reports counts', /Added: \d+/.test(r10.stdout + r10.stderr));
+
+  node(...adoptArgs); // second run
+  const agentsAgain = readFileSync(join(targetE, 'AGENTS.md'), 'utf8');
+  ok('case 6: idempotent — one adopt block',
+    (agentsAgain.match(/engineering-kit adopt:v[\d.]+ START/g) ?? []).length === 1);
+
+  const targetF = join(work, 'dry-run');
+  mkdirSync(targetF, { recursive: true });
+  writeFileSync(join(targetF, 'AGENTS.md'), 'keep me\n');
+  const r11 = node(INIT, [targetF, '--adopt', '--dry-run', '--yes'], ROOT);
+  ok('case 7: --dry-run exits 0 and prints plan',
+    r11.status === 0 && (r11.stdout + r11.stderr).includes('DRY RUN'));
+  ok('case 7: --dry-run wrote nothing', !existsSync(join(targetF, 'scripts')));
+
   // ── summary ────────────────────────────────────────────────────────────
   console.log(`\n${'═'.repeat(64)}`);
   if (failed === 0) console.log('✅ LIFECYCLE: ALL CHECKS PASS');
