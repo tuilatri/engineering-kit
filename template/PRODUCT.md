@@ -1,4 +1,4 @@
-# PRODUCT — {{PROJECT_NAME}} (example — rename to PRODUCT.md and fill)
+# PRODUCT — {{PROJECT_NAME}} (fill in per project)
 
 > Product truth for agents. No invented customers, prices, or claims — everything here
 > should be traceable to the code in this repo.

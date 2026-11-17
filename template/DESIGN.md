@@ -1,4 +1,4 @@
-# DESIGN — {{PROJECT_NAME}} (example — rename to DESIGN.md and fill)
+# DESIGN — {{PROJECT_NAME}} (fill in per project)
 
 > Durable visual decisions, documented from the built UI (not a wishlist). Details go in
 > `docs/ai-context/UI_UX_RULES.md` and `FRONTEND_MAP.md`; this file holds the decisions.

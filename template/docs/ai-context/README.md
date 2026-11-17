@@ -22,16 +22,16 @@ SOURCE OF TRUTH for one domain — docs contradict code ⇒ code is right, docs 
 | BEHAVIORAL_GUIDELINES.md | Principles + skill/agent selection |
 | PROMPT_TEMPLATES.md | Reusable templates |
 
-## Starter / example files (rename and fill — they ship with placeholders on purpose)
+## Starter files (fill them in — placeholders on purpose)
 
-| File | What it is | When to use it |
+| File | What it is | When to fill it |
 |---|---|---|
-| `../../PRODUCT.example.md` | Example product truth: apps, audience, jobs, constraints | Copy to `PRODUCT.md` once the product is clear; replace every `<...>` with real facts |
-| `../../DESIGN.example.md` | Example durable visual decisions: tokens, type, surfaces, motion | Copy to `DESIGN.md` when the UI world is chosen; use your own hex values |
-| `../../GLOSSARY.example.md` | Example ubiquitous-language table | Copy to `GLOSSARY.md` and add real domain terms (≤ 2 lines each) |
-| `../../.githooks/pre-commit.example` | Fast pre-commit gate (`verify.mjs --fast`) | Rename to `pre-commit`, then `git config core.hooksPath .githooks` |
-| `../../scripts/gate.example.mjs` | Cross-platform Node/Python gate dispatcher | Rename to `gate.mjs`, set your app path, pair with root npm scripts |
+| `PRODUCT.md` | Product truth: apps, audience, jobs, constraints | Once the product is clear; replace every `<...>` with real facts |
+| `DESIGN.md` | Durable visual decisions: tokens, type, surfaces, motion | When the UI world is chosen; use your own hex values |
+| `GLOSSARY.md` | Ubiquitous-language table | As the domain sharpens; add real terms (≤ 2 lines each) |
+| `.githooks/pre-commit` | Fast gate before each commit | Install with `git config core.hooksPath .githooks` |
+| `scripts/gate.mjs` | Cross-platform Node/Python gate dispatcher | Set your backend path; pair with root npm scripts |
 
-These `.example` files deliberately contain no project facts — the kit's process is
-portable, the numbers and decisions belong to your project. `doc-truth.mjs` fails when
+These files deliberately contain no project facts — the kit's process is portable,
+the numbers and decisions belong to your project. `doc-truth.mjs` fails when
 documented numbers drift from reality, so measure before filling `MEASURE`.

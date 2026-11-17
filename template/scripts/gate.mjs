@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Cross-platform gate dispatcher EXAMPLE — rename to gate.mjs and adjust paths.
+ * Cross-platform gate dispatcher — adjust the backend path below for your repo.
  *   node gate.mjs node <script> [args…]  -> run a Node script from repo root
  *   node gate.mjs python <args…>         -> run pytest via the backend venv
  * Windows uses .venv/Scripts/python.exe, POSIX uses .venv/bin/python.
