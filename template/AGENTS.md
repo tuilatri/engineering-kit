@@ -22,7 +22,7 @@
 3. **Read `docs/ai-context/KNOWN_TRAPS.md`** — avoid known pitfalls
 4. **Check the Doc Trigger table** — read the matching doc files. Declare it in the first line of your reply.
 5. **Before EVERY edit** — run impact analysis on the target symbol
-6. **Large task (≥3 files, ≥5 changes)** — create a hierarchical plan
+6. **Large task (≥3 files, ≥5 changes)** — create a hierarchical plan (see Workflow Contract; plan-first applies to all non-trivial work)
 7. **Before committing** — run detect_changes() to confirm scope
 8. 🔴 **Tasks must have immutable IDs** (`P2-9`, `PR #7`) — never "item N"
 
@@ -31,6 +31,24 @@
 # Plan & Task Documents
 
 **MANDATORY**: create `implementation_plan.md` + `task.md` in `drafts/plans/<MMDDYY>_<n>_<status>/`.
+
+`<status>` lifecycle:
+- `draft` — new plan, work in progress.
+- `done` — every task in `task.md` is `[x]` and its verification passed.
+- `cancelled` — stopped by owner decision; append `Status: cancelled — <reason>` to `task.md` and leave unfinished boxes unchecked.
+
+Tick `[x]` as each task finishes, not in one batch at the end. Rename the folder to `_done` when the last task verifies green, or to `_cancelled` when the owner stops it.
+
+# Workflow Contract (owner-approved pattern)
+
+For every **non-trivial** request (code/config/docs/skill changes, or ≥3 files), follow this loop:
+
+1. **Classify** — questions, read-only inspection/reports, and a clearly labelled one-line typo fix with "làm luôn" are exempt; when in doubt, plan.
+2. **Plan first** — before any edit, create `implementation_plan.md` + `task.md` in `drafts/plans/<MMDDYY>_<n>_<status>/` with immutable IDs, exact files/interfaces and verification steps. Then **STOP** in the same turn — wait for owner approval.
+3. **Execute after approval** — implement exactly the approved plan; surface any deviation first. When executing a ticket in `docs/tickets/`, rename `open-… → doing-…` at start and `doing-… → done-…` only after green verification. **State lives in the filename — never change it by editing the body.**
+4. **Verify & repair** — run the gates relevant to scope; on failure, fix until all green; quote real command output — never claim success from memory.
+5. **Stop clean** — when verification is green, stop. **Do NOT commit or push unless the owner explicitly asks in that same turn.** A push/PR/merge request does **NOT** imply commit permission — ask first when changes are uncommitted.
+6. **Ambiguity guard** — the owner can force planning with "plan" / "follow the process", or force immediate action with "làm luôn" / "just do it".
 
 # Commit Message Convention
 
@@ -53,6 +71,7 @@
 6. **Test gate:** run the project's verify gate (declared in Quick Facts). Current counts live in `docs/ai-context/TESTING_GUIDE.md` §1 — measure, never guess.
 7. **Never commit secrets.** `.env`, `.env.*`, credential files — gitignored. Never quote values.
 8. **Never commit build output / dependencies / runtime data.**
+9. **No implicit commit/push** — only when the owner explicitly asks in the current turn (see Workflow Contract step 5). Push/PR/merge ≠ commit permission: if changes are uncommitted, ask first.
 
 ---
 
@@ -65,6 +84,7 @@
 | any route in `frontend/src/app/` *(project-specific)* | `docs/ai-context/FRONTEND_MAP.md` §1 | ✔ |
 | anything in `frontend/src/components/` *(project-specific)* | `docs/ai-context/FRONTEND_MAP.md` §2–§5 | ✔ |
 | backend/tests or pytest config | `docs/ai-context/TESTING_GUIDE.md` | ✔ |
+| `docs/tickets/` or `docs/specs/` | `docs/agents/issue-tracker-local.md` (state = filename rename) | ✔ |
 | repo structure, adding/removing apps | `docs/ai-context/MODULE_MAP.md` | ✔ |
 | `HOW_TO_RUN.txt`, `.env*` | Standing Rules 7 | ✔ |
 | add/change gates, claims | `kit.config.json` (+ `kit.config.schema.json`) | ✔ |

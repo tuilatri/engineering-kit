@@ -16,3 +16,27 @@ it cannot be generic. Two options:
 2. **Port from the sample**: https://github.com/tuilatri/engineering-kit/tree/main/example/.agent/rules
    When porting, **scrub the project-specific parts**: accounts/palette files, chat-language
    rules, app names, and any skill/workflow that does not exist in your repo.
+
+## Minimal ROUTER.md skeleton (port this, then fill in your paths)
+
+```markdown
+# ROUTER — pre-task bootstrap
+
+## Loading order
+1. AGENTS.md — contract, Pre-Task Checklist, Doc Trigger.
+2. docs/ai-context/README.md → the matching doc for this task.
+3. docs/ai-context/KNOWN_TRAPS.md — always before fixing anything.
+
+## Task type → docs / skills
+| Task type | Read | Skill |
+|---|---|---|
+| API endpoint | API_MAP.md, ARCHITECTURE.md | api-patterns |
+| Service / data | ARCHITECTURE.md, MODULE_MAP.md | database-design |
+| Frontend / UX | FRONTEND_MAP.md, UI_UX_RULES.md | design skill |
+| Tests / bug fix | TESTING_GUIDE.md, KNOWN_TRAPS.md | tdd, systematic-debugging |
+
+General rules (commit convention, plan folder, Workflow Contract) live in AGENTS.md —
+reference them, never duplicate them here.
+```
+
+Keep the table to 3–6 rows; an empty router is worse than none.

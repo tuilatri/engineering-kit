@@ -7,6 +7,7 @@ SOURCE OF TRUTH for one domain — docs contradict code ⇒ code is right, docs 
 - Numbers (lines/tests/files): measure with the commands in TESTING_GUIDE §1 — NEVER guess
 - After each feature: update the matching doc per the Doc Trigger table in AGENTS.md
 - Numbers use DOT as the thousands-separator: "5.670" = 5670 (docNum() strips dots)
+- Process rules (Workflow Contract, plan status lifecycle, commit permission, ticket `open- → doing- → done-`) live in `AGENTS.md`; workflow prompts live in `PROMPT_TEMPLATES.md`; ticket conventions in `docs/agents/issue-tracker-local.md`.
 
 ## Index
 | Doc | Content |

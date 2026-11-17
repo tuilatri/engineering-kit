@@ -19,6 +19,30 @@ Reference example (port it, then scrub the project-specific parts — app names,
 test counts, paths specific to the sample repo):
 https://github.com/tuilatri/engineering-kit/tree/main/example/.opencode/skills/book-collection-conventions/SKILL.md
 
+Minimal `SKILL.md` skeleton (generic — fill the scope with real paths from your repo):
+
+```markdown
+---
+name: <project>-conventions
+description: Hard rules for <project> — use when writing/changing code in the app's
+  backend/**, frontend/**, or docs/**. Also use when editing the matching context docs.
+metadata:
+  scope: backend/**, frontend/**, docs/**
+---
+
+# <project> conventions
+
+Rule 0 — Read before edit. First line of every reply is `Read: <files>`; follow the
+AGENTS.md Doc Trigger. Why: docs are the agent's source of truth. Example: touching
+an endpoint → read + update API_MAP.md in the same change.
+
+Rule 1 — Measure, never guess. Numbers in docs come from commands in TESTING_GUIDE §1.
+Why: drift is the most common failure of agent-written docs.
+
+Rule 2 — Verify with real evidence. Run the relevant gates and quote output; fix until
+green before claiming success.
+```
+
 **Registering the path**: this directory only takes effect if the tool is configured
 to scan the right skills location — OpenCode needs `opencode.json` with
 `"skills": { "paths": [".opencode/skills"] }`, Claude Code needs
