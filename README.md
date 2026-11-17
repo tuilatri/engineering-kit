@@ -6,7 +6,7 @@ Personal engineering kit I use to scaffold my own AI-assisted projects.
 npx github:tuilatri/engineering-kit init my-new-project --yes
 ```
 
-Pin a release: `npx github:tuilatri/engineering-kit#v0.3.2 init my-new-project --yes`.
+Pin a release: `npx github:tuilatri/engineering-kit#v0.4.0 init my-new-project --yes`.
 Registry path (only after `npm publish`): `npx engineering-kit init my-new-project`.
 Dev mode: `node <this-repo>/src/init.mjs my-new-project --yes`.
 
@@ -36,7 +36,20 @@ cd my-new-project
 ```
 
 CLI: `engineering-kit init <dir> [--name <name>] [--lang vi|en] [--no-skills] [--yes]`.
-Guard: it never overwrites a directory that already has `AGENTS.md`.
+Guard: by default it refuses a directory that already has `AGENTS.md`.
+
+### Installing into a project already in progress
+
+```bash
+npx github:tuilatri/engineering-kit init . --adopt --dry-run   # preview: add / skip / merge
+npx github:tuilatri/engineering-kit init . --adopt --yes       # apply
+```
+
+`--adopt` is explicit opt-in: it **adds only missing files**, skips anything the project
+already owns (including filled `docs/ai-context/*`, `.env`, `.gitignore`, skill folders
+and the `.engineering-kit` marker), and appends one marked Workflow Contract block to
+an existing `AGENTS.md` instead of overwriting it. Running it twice is idempotent;
+`--dry-run` writes nothing. See `docs/specs/SPEC-init-adopt.md`.
 
 ## `template/` vs `example/`
 
